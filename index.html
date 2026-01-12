@@ -9,19 +9,18 @@ body{
  font-family:'Segoe UI',Arial;
  background:linear-gradient(135deg,#0f2027,#203a43,#2c5364);
  color:white;
- overflow-x:hidden;
 }
 header{
  background:linear-gradient(90deg,#4ecdc4,#6be6ff);
  color:#003333;
- padding:20px;
+ padding:18px;
  text-align:center;
  font-size:24px;
  font-weight:bold;
 }
-.page{display:none;padding:20px;animation:fade .6s;}
+.page{display:none;padding:20px;animation:fade .5s;}
 .page.active{display:block;}
-@keyframes fade{from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:translateY(0);}}
+@keyframes fade{from{opacity:0;transform:translateY(15px);}to{opacity:1;transform:translateY(0);}}
 
 .card{
  background:rgba(255,255,255,0.08);
@@ -32,31 +31,23 @@ header{
  margin-bottom:20px;
 }
 
+button,input{
+ width:100%;
+ padding:14px;
+ border:none;
+ border-radius:14px;
+ margin-top:10px;
+}
 button{
  background:linear-gradient(90deg,#4ecdc4,#6be6ff);
- border:none;
- padding:14px;
- width:100%;
- border-radius:30px;
- font-size:16px;
- font-weight:bold;
  color:#003333;
+ font-weight:bold;
  transition:.3s;
 }
 button:hover{transform:scale(1.05);}
 
-input{
- width:100%;
- padding:14px;
- border-radius:12px;
- border:none;
- margin-top:10px;
- background:rgba(255,255,255,0.2);
- color:white;
-}
-
 .progress{
- height:12px;
+ height:14px;
  background:#333;
  border-radius:10px;
  overflow:hidden;
@@ -68,11 +59,14 @@ input{
  transition:width 1s;
 }
 
-img.hero{
- width:100%;
- border-radius:15px;
- margin-top:15px;
- box-shadow:0 10px 20px rgba(0,0,0,.5);
+.badge{
+ display:inline-block;
+ padding:6px 12px;
+ border-radius:20px;
+ background:#4ecdc4;
+ color:#003333;
+ font-size:12px;
+ margin:4px;
 }
 
 .nav{
@@ -80,15 +74,13 @@ img.hero{
  bottom:0;
  width:100%;
  display:flex;
- background:rgba(78,205,196,.9);
+ background:rgba(78,205,196,.95);
 }
 .nav button{
  flex:1;
  background:transparent;
- border:none;
- padding:15px;
- font-weight:bold;
  color:#003333;
+ font-weight:bold;
 }
 </style>
 </head>
@@ -99,12 +91,10 @@ img.hero{
 
 <div id="welcome" class="page active">
 <div class="card">
-<h2>Welcome to GrowTall</h2>
-<p>Grow taller with science & discipline</p>
-<img class="hero" src="https://images.unsplash.com/photo-1605296867304-46d5465a13f1?auto=format&fit=crop&w=900&q=60">
+<h2>Start Your Journey</h2>
 <input id="cur" placeholder="Your height (inch)">
 <input id="goal" placeholder="Your goal height">
-<button onclick="start()">Start Your Journey</button>
+<button onclick="start()">Begin</button>
 </div>
 </div>
 
@@ -113,37 +103,36 @@ img.hero{
 <h2>Your Progress</h2>
 <p id="ptext"></p>
 <div class="progress"><div id="pbar"></div></div>
+<p>🔥 Streak: <span id="streak">0</span> days</p>
+<div id="badges"></div>
+<button onclick="logDay()">Mark Today Done</button>
 </div>
 </div>
 
-<div id="exercise" class="page">
-<div class="card">
-<h2>Daily Exercises</h2>
-<img class="hero" src="https://images.unsplash.com/photo-1599058917212-d750089bc3d1?auto=format&fit=crop&w=900&q=60">
-<p>Hanging, Skipping, Stretching</p>
-</div>
-</div>
-
-<div id="diet" class="page">
-<div class="card">
-<h2>Healthy Diet</h2>
-<img class="hero" src="https://images.unsplash.com/photo-1543353071-873f17a7a088?auto=format&fit=crop&w=900&q=60">
-<p>Milk, Eggs, Fruits, Vegetables</p>
-</div>
-</div>
-
-<div class="nav" id="nav" style="display:none;">
+<div id="nav" class="nav" style="display:none;">
 <button onclick="show('home')">Home</button>
-<button onclick="show('exercise')">Exercise</button>
-<button onclick="show('diet')">Diet</button>
 </div>
 
 <script>
 function start(){
- localStorage.setItem("cur",document.getElementById("cur").value);
- localStorage.setItem("goal",document.getElementById("goal").value);
+ localStorage.setItem("cur",cur.value);
+ localStorage.setItem("goal",goal.value);
+ localStorage.setItem("streak",0);
+ localStorage.setItem("last",new Date().toDateString());
  document.getElementById("nav").style.display="flex";
  show('home');
+ update();
+}
+
+function logDay(){
+ let last=new Date(localStorage.getItem("last"));
+ let today=new Date();
+ let s=parseInt(localStorage.getItem("streak")||0);
+ if(today.toDateString()!=last.toDateString()){
+  s++;
+  localStorage.setItem("streak",s);
+  localStorage.setItem("last",today.toDateString());
+ }
  update();
 }
 
@@ -151,8 +140,15 @@ function update(){
  let c=localStorage.getItem("cur");
  let g=localStorage.getItem("goal");
  let p=(c/g*100).toFixed(1);
- document.getElementById("ptext").innerHTML=c+" ➜ "+g+" inch ("+p+"%)";
- document.getElementById("pbar").style.width=p+"%";
+ pbar.style.width=p+"%";
+ ptext.innerHTML=c+" ➜ "+g+" inch ("+p+"%)";
+ streak.innerText=localStorage.getItem("streak")||0;
+
+ let s=parseInt(streak.innerText);
+ badges.innerHTML="";
+ if(s>=7) badges.innerHTML+="<span class='badge'>🥉 Starter</span>";
+ if(s>=14) badges.innerHTML+="<span class='badge'>🥈 Pro</span>";
+ if(s>=30) badges.innerHTML+="<span class='badge'>🥇 Champion</span>";
 }
 
 function show(p){
