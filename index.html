@@ -19,11 +19,9 @@ header{
  background:linear-gradient(90deg,#5eead4,#38bdf8);
  color:#022c22;
 }
-
 .screen{display:none;padding:20px;animation:fade .5s;}
 .screen.active{display:block;}
 @keyframes fade{from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:translateY(0);}}
-
 .card{
  background:rgba(255,255,255,0.06);
  backdrop-filter:blur(14px);
@@ -32,66 +30,31 @@ header{
  box-shadow:0 10px 30px rgba(0,0,0,.5);
  margin-bottom:20px;
 }
-
-input{
+input,button{
  width:100%;
  padding:14px;
  border:none;
  border-radius:14px;
  margin-top:12px;
- background:rgba(255,255,255,.12);
- color:#e8f1ff;
  font-size:16px;
 }
-input::placeholder{color:#b6c8e3;}
-
+input{background:rgba(255,255,255,.12);color:#e8f1ff;}
 button{
- width:100%;
- padding:14px;
- border:none;
- border-radius:16px;
- margin-top:12px;
  background:linear-gradient(90deg,#5eead4,#38bdf8);
  color:#022c22;
  font-weight:600;
- font-size:16px;
- transition:.3s;
 }
-button:hover{transform:scale(1.04);}
-
-.progress{
- height:14px;
- background:#1e293b;
- border-radius:10px;
- overflow:hidden;
-}
-.progress div{
- height:100%;
- background:linear-gradient(90deg,#5eead4,#38bdf8);
- width:0%;
- transition:1s;
-}
-
 .nav{
  position:fixed;
  bottom:0;
  width:100%;
  display:flex;
  background:rgba(20,34,59,.95);
- backdrop-filter:blur(10px);
 }
 .nav button{
  flex:1;
  background:transparent;
  color:#e8f1ff;
- font-weight:600;
-}
-
-.hero{
- width:100%;
- border-radius:18px;
- margin-bottom:15px;
- box-shadow:0 10px 20px rgba(0,0,0,.6);
 }
 </style>
 </head>
@@ -102,59 +65,56 @@ button:hover{transform:scale(1.04);}
 
 <div id="welcome" class="screen active">
 <div class="card">
-<img class="hero" src="https://images.unsplash.com/photo-1605296867304-46d5465a13f1?auto=format&fit=crop&w=900&q=60">
-<h2>Grow Taller. Live Better.</h2>
-<input id="cur" placeholder="Your height (inch)">
-<input id="goal" placeholder="Your goal height">
-<button onclick="start()">Start</button>
+<h2>GrowTall में आपका स्वागत है</h2>
+<input id="name" placeholder="आपका नाम">
+<input id="cur" placeholder="आपकी ऊँचाई (इंच)">
+<input id="goal" placeholder="आपका लक्ष्य">
+<button onclick="start()">शुरू करें</button>
 </div>
 </div>
 
 <div id="home" class="screen">
 <div class="card">
-<h2>Your Progress</h2>
+<h2>आपकी प्रगति</h2>
 <p id="ptext"></p>
-<div class="progress"><div id="pbar"></div></div>
+<button onclick="notify()">आज का रिमाइंडर चालू करें</button>
 </div>
 </div>
 
-<div id="exercise" class="screen">
+<div id="profile" class="screen">
 <div class="card">
-<h2>Daily Exercise</h2>
-<img class="hero" src="https://images.unsplash.com/photo-1599058917212-d750089bc3d1?auto=format&fit=crop&w=900&q=60">
-<p>Hanging, Skipping, Stretching</p>
-</div>
-</div>
-
-<div id="diet" class="screen">
-<div class="card">
-<h2>Healthy Diet</h2>
-<img class="hero" src="https://images.unsplash.com/photo-1543353071-873f17a7a088?auto=format&fit=crop&w=900&q=60">
-<p>Milk, Eggs, Fruits, Vegetables</p>
+<h2>प्रोफ़ाइल</h2>
+<p id="profileText"></p>
 </div>
 </div>
 
 <div class="nav" id="nav" style="display:none">
-<button onclick="show('home')">Home</button>
-<button onclick="show('exercise')">Exercise</button>
-<button onclick="show('diet')">Diet</button>
+<button onclick="show('home')">होम</button>
+<button onclick="show('profile')">प्रोफ़ाइल</button>
 </div>
 
 <script>
 function start(){
+ localStorage.setItem("name",name.value);
  localStorage.setItem("cur",cur.value);
  localStorage.setItem("goal",goal.value);
  nav.style.display="flex";
  show('home');
  update();
 }
+
 function update(){
+ let n=localStorage.getItem("name");
  let c=localStorage.getItem("cur");
  let g=localStorage.getItem("goal");
- let p=(c/g*100).toFixed(1);
- ptext.innerHTML=c+" ➜ "+g+" inch ("+p+"%)";
- pbar.style.width=p+"%";
+ ptext.innerHTML="नमस्ते "+n+" 👋<br>ऊँचाई: "+c+" ➜ लक्ष्य: "+g;
+ profileText.innerHTML="नाम: "+n+"<br>ऊँचाई: "+c+"<br>लक्ष्य: "+g;
 }
+
+function notify(){
+ alert("रोज़ाना रिमाइंडर चालू हो गया 💪");
+}
+
 function show(s){
  document.querySelectorAll('.screen').forEach(e=>e.classList.remove('active'));
  document.getElementById(s).classList.add('active');
