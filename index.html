@@ -2,49 +2,53 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>GrowTall Pro</title>
+<title>GrowTall</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
 <style>
+*{box-sizing:border-box}
 body{
  margin:0;
- font-family:'Segoe UI',Arial;
+ font-family:Poppins,Arial;
  background:linear-gradient(135deg,#0f2027,#203a43,#2c5364);
  color:white;
 }
 header{
+ padding:20px;
+ text-align:center;
+ font-size:26px;
+ font-weight:600;
  background:linear-gradient(90deg,#4ecdc4,#6be6ff);
  color:#003333;
- padding:18px;
- text-align:center;
- font-size:24px;
- font-weight:bold;
 }
-.page{display:none;padding:20px;animation:fade .5s;}
-.page.active{display:block;}
-@keyframes fade{from{opacity:0;transform:translateY(15px);}to{opacity:1;transform:translateY(0);}}
+.screen{display:none;padding:20px;animation:fade .5s;}
+.screen.active{display:block;}
+@keyframes fade{from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:translateY(0);}}
 
 .card{
  background:rgba(255,255,255,0.08);
  backdrop-filter:blur(12px);
  padding:20px;
- border-radius:20px;
- box-shadow:0 15px 30px rgba(0,0,0,0.4);
+ border-radius:25px;
+ box-shadow:0 15px 40px rgba(0,0,0,.4);
  margin-bottom:20px;
 }
 
-button,input{
+input,button{
  width:100%;
  padding:14px;
  border:none;
- border-radius:14px;
- margin-top:10px;
+ border-radius:16px;
+ margin-top:12px;
+ font-size:16px;
 }
+input{background:rgba(255,255,255,.2);color:white}
 button{
  background:linear-gradient(90deg,#4ecdc4,#6be6ff);
  color:#003333;
- font-weight:bold;
+ font-weight:600;
  transition:.3s;
 }
-button:hover{transform:scale(1.05);}
+button:hover{transform:scale(1.05)}
 
 .progress{
  height:14px;
@@ -56,17 +60,7 @@ button:hover{transform:scale(1.05);}
  height:100%;
  background:linear-gradient(90deg,#4ecdc4,#6be6ff);
  width:0%;
- transition:width 1s;
-}
-
-.badge{
- display:inline-block;
- padding:6px 12px;
- border-radius:20px;
- background:#4ecdc4;
- color:#003333;
- font-size:12px;
- margin:4px;
+ transition:1s;
 }
 
 .nav{
@@ -80,80 +74,79 @@ button:hover{transform:scale(1.05);}
  flex:1;
  background:transparent;
  color:#003333;
- font-weight:bold;
+ font-weight:600;
+}
+
+.hero{
+ width:100%;
+ border-radius:20px;
+ margin-bottom:15px;
 }
 </style>
 </head>
 
 <body>
 
-<header>GrowTall Pro</header>
+<header>GrowTall</header>
 
-<div id="welcome" class="page active">
+<div id="welcome" class="screen active">
 <div class="card">
-<h2>Start Your Journey</h2>
+<img class="hero" src="https://images.unsplash.com/photo-1605296867304-46d5465a13f1?auto=format&fit=crop&w=900&q=60">
+<h2>Grow Taller. Live Better.</h2>
 <input id="cur" placeholder="Your height (inch)">
 <input id="goal" placeholder="Your goal height">
-<button onclick="start()">Begin</button>
+<button onclick="start()">Start</button>
 </div>
 </div>
 
-<div id="home" class="page">
+<div id="home" class="screen">
 <div class="card">
 <h2>Your Progress</h2>
 <p id="ptext"></p>
 <div class="progress"><div id="pbar"></div></div>
-<p>🔥 Streak: <span id="streak">0</span> days</p>
-<div id="badges"></div>
-<button onclick="logDay()">Mark Today Done</button>
 </div>
 </div>
 
-<div id="nav" class="nav" style="display:none;">
+<div id="exercise" class="screen">
+<div class="card">
+<h2>Daily Exercise</h2>
+<img class="hero" src="https://images.unsplash.com/photo-1599058917212-d750089bc3d1?auto=format&fit=crop&w=900&q=60">
+<p>Hanging, Skipping, Stretching</p>
+</div>
+</div>
+
+<div id="diet" class="screen">
+<div class="card">
+<h2>Healthy Diet</h2>
+<img class="hero" src="https://images.unsplash.com/photo-1543353071-873f17a7a088?auto=format&fit=crop&w=900&q=60">
+<p>Milk, Eggs, Fruits, Vegetables</p>
+</div>
+</div>
+
+<div class="nav" id="nav" style="display:none">
 <button onclick="show('home')">Home</button>
+<button onclick="show('exercise')">Exercise</button>
+<button onclick="show('diet')">Diet</button>
 </div>
 
 <script>
 function start(){
  localStorage.setItem("cur",cur.value);
  localStorage.setItem("goal",goal.value);
- localStorage.setItem("streak",0);
- localStorage.setItem("last",new Date().toDateString());
- document.getElementById("nav").style.display="flex";
+ nav.style.display="flex";
  show('home');
  update();
 }
-
-function logDay(){
- let last=new Date(localStorage.getItem("last"));
- let today=new Date();
- let s=parseInt(localStorage.getItem("streak")||0);
- if(today.toDateString()!=last.toDateString()){
-  s++;
-  localStorage.setItem("streak",s);
-  localStorage.setItem("last",today.toDateString());
- }
- update();
-}
-
 function update(){
  let c=localStorage.getItem("cur");
  let g=localStorage.getItem("goal");
  let p=(c/g*100).toFixed(1);
- pbar.style.width=p+"%";
  ptext.innerHTML=c+" ➜ "+g+" inch ("+p+"%)";
- streak.innerText=localStorage.getItem("streak")||0;
-
- let s=parseInt(streak.innerText);
- badges.innerHTML="";
- if(s>=7) badges.innerHTML+="<span class='badge'>🥉 Starter</span>";
- if(s>=14) badges.innerHTML+="<span class='badge'>🥈 Pro</span>";
- if(s>=30) badges.innerHTML+="<span class='badge'>🥇 Champion</span>";
+ pbar.style.width=p+"%";
 }
-
-function show(p){
- document.querySelectorAll('.page').forEach(e=>e.classList.remove('active'));
- document.getElementById(p).classList.add('active');
+function show(s){
+ document.querySelectorAll('.screen').forEach(e=>e.classList.remove('active'));
+ document.getElementById(s).classList.add('active');
 }
 </script>
 
