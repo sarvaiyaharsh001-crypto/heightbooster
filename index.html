@@ -6,63 +6,89 @@
 <style>
 body{
  margin:0;
- font-family:Arial;
+ font-family:'Segoe UI',Arial;
  background:linear-gradient(135deg,#0f2027,#203a43,#2c5364);
  color:white;
+ overflow-x:hidden;
 }
 header{
- background:#4ecdc4;
+ background:linear-gradient(90deg,#4ecdc4,#6be6ff);
  color:#003333;
- padding:15px;
+ padding:20px;
  text-align:center;
- font-size:22px;
+ font-size:24px;
  font-weight:bold;
 }
-.page{display:none;padding:15px;}
+.page{display:none;padding:20px;animation:fade .6s;}
 .page.active{display:block;}
+@keyframes fade{from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:translateY(0);}}
+
 .card{
  background:rgba(255,255,255,0.08);
- backdrop-filter: blur(10px);
- padding:15px;
- margin-bottom:15px;
- border-radius:15px;
- box-shadow:0 0 10px rgba(78,205,196,0.6);
+ backdrop-filter:blur(12px);
+ padding:20px;
+ border-radius:20px;
+ box-shadow:0 15px 30px rgba(0,0,0,0.4);
+ margin-bottom:20px;
 }
-button,input{
- width:100%;
- padding:12px;
- border:none;
- border-radius:10px;
- margin-top:10px;
-}
+
 button{
- background:#4ecdc4;
- color:#003333;
- font-weight:bold;
-}
-.nav{
- position:fixed;
- bottom:0;
+ background:linear-gradient(90deg,#4ecdc4,#6be6ff);
+ border:none;
+ padding:14px;
  width:100%;
- display:flex;
- background:rgba(78,205,196,0.9);
-}
-.nav button{
- flex:1;
- background:transparent;
- color:#003333;
+ border-radius:30px;
+ font-size:16px;
  font-weight:bold;
+ color:#003333;
+ transition:.3s;
 }
+button:hover{transform:scale(1.05);}
+
+input{
+ width:100%;
+ padding:14px;
+ border-radius:12px;
+ border:none;
+ margin-top:10px;
+ background:rgba(255,255,255,0.2);
+ color:white;
+}
+
 .progress{
- height:10px;
+ height:12px;
  background:#333;
  border-radius:10px;
  overflow:hidden;
 }
 .progress div{
  height:100%;
- background:#4ecdc4;
+ background:linear-gradient(90deg,#4ecdc4,#6be6ff);
  width:0%;
+ transition:width 1s;
+}
+
+img.hero{
+ width:100%;
+ border-radius:15px;
+ margin-top:15px;
+ box-shadow:0 10px 20px rgba(0,0,0,.5);
+}
+
+.nav{
+ position:fixed;
+ bottom:0;
+ width:100%;
+ display:flex;
+ background:rgba(78,205,196,.9);
+}
+.nav button{
+ flex:1;
+ background:transparent;
+ border:none;
+ padding:15px;
+ font-weight:bold;
+ color:#003333;
 }
 </style>
 </head>
@@ -74,9 +100,11 @@ button{
 <div id="welcome" class="page active">
 <div class="card">
 <h2>Welcome to GrowTall</h2>
+<p>Grow taller with science & discipline</p>
+<img class="hero" src="https://images.unsplash.com/photo-1605296867304-46d5465a13f1?auto=format&fit=crop&w=900&q=60">
 <input id="cur" placeholder="Your height (inch)">
 <input id="goal" placeholder="Your goal height">
-<button onclick="start()">Start Journey</button>
+<button onclick="start()">Start Your Journey</button>
 </div>
 </div>
 
@@ -90,21 +118,21 @@ button{
 
 <div id="exercise" class="page">
 <div class="card">
-<h2>Daily Exercise</h2>
-<p>Hanging 30 sec × 5</p>
-<p>Skipping 60 sec × 3</p>
-<p>Stretching 2 min</p>
+<h2>Daily Exercises</h2>
+<img class="hero" src="https://images.unsplash.com/photo-1599058917212-d750089bc3d1?auto=format&fit=crop&w=900&q=60">
+<p>Hanging, Skipping, Stretching</p>
 </div>
 </div>
 
 <div id="diet" class="page">
 <div class="card">
-<h2>Diet</h2>
-<p>Milk, Eggs, Paneer, Fruits, Veg</p>
+<h2>Healthy Diet</h2>
+<img class="hero" src="https://images.unsplash.com/photo-1543353071-873f17a7a088?auto=format&fit=crop&w=900&q=60">
+<p>Milk, Eggs, Fruits, Vegetables</p>
 </div>
 </div>
 
-<div id="nav" class="nav" style="display:none;">
+<div class="nav" id="nav" style="display:none;">
 <button onclick="show('home')">Home</button>
 <button onclick="show('exercise')">Exercise</button>
 <button onclick="show('diet')">Diet</button>
@@ -112,20 +140,18 @@ button{
 
 <script>
 function start(){
- let c=document.getElementById("cur").value;
- let g=document.getElementById("goal").value;
- localStorage.setItem("cur",c);
- localStorage.setItem("goal",g);
- show('home');
+ localStorage.setItem("cur",document.getElementById("cur").value);
+ localStorage.setItem("goal",document.getElementById("goal").value);
  document.getElementById("nav").style.display="flex";
+ show('home');
  update();
 }
 
 function update(){
  let c=localStorage.getItem("cur");
  let g=localStorage.getItem("goal");
- let p=((c/g)*100).toFixed(1);
- document.getElementById("ptext").innerHTML="Height: "+c+" / "+g+" inch";
+ let p=(c/g*100).toFixed(1);
+ document.getElementById("ptext").innerHTML=c+" ➜ "+g+" inch ("+p+"%)";
  document.getElementById("pbar").style.width=p+"%";
 }
 
