@@ -7,7 +7,7 @@
 body{
  margin:0;
  font-family:Arial;
- background:#000;
+ background:linear-gradient(135deg,#000,#0b2d1a);
  color:white;
 }
 header{
@@ -20,21 +20,39 @@ header{
 }
 .page{display:none;padding:15px;}
 .page.active{display:block;}
+
 .card{
- background:#111;
- margin-bottom:15px;
+ background:rgba(0,0,0,0.8);
  padding:15px;
+ margin-bottom:15px;
  border-radius:15px;
- box-shadow:0 0 10px #00ff99;
+ box-shadow:0 0 15px #00ff99;
 }
-button,input{
- width:100%;
- padding:10px;
- margin-top:10px;
+
+button{
+ background:#00ff99;
+ color:black;
  border:none;
- border-radius:10px;
+ padding:12px;
+ width:100%;
+ border-radius:20px;
+ font-size:16px;
+ font-weight:bold;
+ margin-top:10px;
 }
-button{background:#00ff99;font-weight:bold;}
+
+.exercise{
+ border-left:5px solid #00ff99;
+ padding-left:10px;
+ margin-bottom:15px;
+}
+
+.timer{
+ text-align:center;
+ font-size:22px;
+ color:#00ff99;
+}
+
 .nav{
  position:fixed;
  bottom:0;
@@ -44,11 +62,12 @@ button{background:#00ff99;font-weight:bold;}
 }
 .nav button{
  flex:1;
- border:none;
  background:#00ff99;
+ border:none;
  padding:15px;
  font-weight:bold;
 }
+
 </style>
 </head>
 
@@ -56,50 +75,59 @@ button{background:#00ff99;font-weight:bold;}
 
 <header>Height Booster – Harsh</header>
 
-<!-- HOME -->
 <div id="home" class="page active">
 <div class="card">
 <h2>📏 Height Calculator</h2>
-<input type="number" id="h" value="65">
-<button onclick="predict()">Predict Height</button>
-<p id="r"></p>
+<input id="h" type="number" value="65">
+<button onclick="predict()">Predict Future Height</button>
+<p id="r" class="timer"></p>
 </div>
 </div>
 
-<!-- EXERCISE -->
 <div id="exercise" class="page">
 <div class="card">
-<h2>💪 Exercise</h2>
-<p><b>Hanging:</b> 30–60 sec × 5</p>
-<p><b>Stretching:</b> 10 min</p>
-<p><b>Skipping:</b> 5 min</p>
-<p><b>Sprinting:</b> 5 rounds</p>
-<p><b>Surya Namaskar:</b> 12 rounds</p>
+
+<div class="exercise">
+<h3>Hanging</h3>
+<p>Hang from bar. 30 sec × 5 sets</p>
+<button onclick="start(30,'Hanging')">Start</button>
+</div>
+
+<div class="exercise">
+<h3>Skipping</h3>
+<p>Jump continuously 60 sec × 3 sets</p>
+<button onclick="start(60,'Skipping')">Start</button>
+</div>
+
+<div class="exercise">
+<h3>Stretching</h3>
+<p>Stretch arms and legs for 2 minutes</p>
+<button onclick="start(120,'Stretching')">Start</button>
+</div>
+
+<div class="timer" id="timer"></div>
+
 </div>
 </div>
 
-<!-- DIET -->
 <div id="diet" class="page">
 <div class="card">
-<h2>🥗 Diet</h2>
-<p>Milk, eggs, paneer</p>
-<p>Banana, nuts</p>
-<p>Green vegetables</p>
-<p>3L water + 8h sleep</p>
+<h2>🥗 Diet Plan</h2>
+<p>Milk, Eggs, Paneer, Banana, Nuts</p>
+<p>Green vegetables, Fruits</p>
+<p>3L Water + 8 Hours Sleep</p>
 </div>
 </div>
 
-<!-- TRACKER -->
 <div id="tracker" class="page">
 <div class="card">
 <h2>📊 Growth Tracker</h2>
 <input id="n" placeholder="Enter new height">
 <button onclick="save()">Save</button>
-<p id="s"></p>
+<p id="s" class="timer"></p>
 </div>
 </div>
 
-<!-- NAV -->
 <div class="nav">
 <button onclick="show('home')">Home</button>
 <button onclick="show('exercise')">Exercise</button>
@@ -112,15 +140,41 @@ function show(p){
  document.querySelectorAll('.page').forEach(e=>e.classList.remove('active'));
  document.getElementById(p).classList.add('active');
 }
+
+function speak(t){
+ let msg=new SpeechSynthesisUtterance(t);
+ speechSynthesis.speak(msg);
+}
+
+let interval;
+
+function start(sec,name){
+ clearInterval(interval);
+ speak(name+" start now");
+ let t=sec;
+ interval=setInterval(()=>{
+  document.getElementById("timer").innerHTML="Time: "+t+" sec";
+  if(t<=0){
+   clearInterval(interval);
+   speak("Rest for 30 seconds");
+  }
+  t--;
+ },1000);
+}
+
 function predict(){
  let h=document.getElementById("h").value;
  document.getElementById("r").innerHTML="Future Height: "+(parseInt(h)+2)+" inch";
 }
+
 function save(){
  let n=document.getElementById("n").value;
  localStorage.setItem("height",n);
  document.getElementById("s").innerHTML="Saved: "+n+" inch ✔";
 }
+
+// Daily voice reminder
+setTimeout(()=>{speak("Time for your height exercise");},5000);
 </script>
 
 </body>
