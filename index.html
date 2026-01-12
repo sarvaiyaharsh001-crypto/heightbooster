@@ -7,12 +7,12 @@
 body{
  margin:0;
  font-family:Arial;
- background:linear-gradient(135deg,#000,#0b2d1a);
+ background:linear-gradient(135deg,#0f2027,#203a43,#2c5364);
  color:white;
 }
 header{
- background:#00ff99;
- color:black;
+ background:#4ecdc4;
+ color:#003333;
  padding:15px;
  text-align:center;
  font-size:22px;
@@ -20,18 +20,17 @@ header{
 }
 .page{display:none;padding:15px;}
 .page.active{display:block;}
-
 .card{
- background:rgba(0,0,0,0.8);
+ background:rgba(255,255,255,0.08);
+ backdrop-filter: blur(10px);
  padding:15px;
  margin-bottom:15px;
  border-radius:15px;
- box-shadow:0 0 15px #00ff99;
+ box-shadow:0 0 10px rgba(78,205,196,0.6);
 }
-
 button{
- background:#00ff99;
- color:black;
+ background:#4ecdc4;
+ color:#003333;
  border:none;
  padding:12px;
  width:100%;
@@ -40,34 +39,40 @@ button{
  font-weight:bold;
  margin-top:10px;
 }
-
-.exercise{
- border-left:5px solid #00ff99;
- padding-left:10px;
- margin-bottom:15px;
+input{
+ width:100%;
+ padding:12px;
+ border-radius:10px;
+ border:none;
+ margin-top:10px;
+ background:rgba(255,255,255,0.2);
+ color:white;
 }
-
-.timer{
- text-align:center;
- font-size:22px;
- color:#00ff99;
-}
-
 .nav{
  position:fixed;
  bottom:0;
  width:100%;
  display:flex;
- background:#00ff99;
+ background:rgba(78,205,196,0.9);
 }
 .nav button{
  flex:1;
- background:#00ff99;
+ background:transparent;
  border:none;
  padding:15px;
+ color:#003333;
  font-weight:bold;
 }
-
+.timer{
+ text-align:center;
+ font-size:22px;
+ color:#4ecdc4;
+}
+img{
+ width:100%;
+ border-radius:10px;
+ margin-top:8px;
+}
 </style>
 </head>
 
@@ -79,50 +84,49 @@ button{
 <div class="card">
 <h2>📏 Height Calculator</h2>
 <input id="h" type="number" value="65">
-<button onclick="predict()">Predict Future Height</button>
+<button onclick="predict()">Predict</button>
 <p id="r" class="timer"></p>
 </div>
 </div>
 
 <div id="exercise" class="page">
 <div class="card">
+<h2>💪 Exercises</h2>
 
-<div class="exercise">
-<h3>Hanging</h3>
-<p>Hang from bar. 30 sec × 5 sets</p>
-<button onclick="start(30,'Hanging')">Start</button>
-</div>
+<p><b>Hanging</b> – 30 sec × 5</p>
+<img src="https://images.unsplash.com/photo-1599058917212-d750089bc3d1?auto=format&fit=crop&w=800&q=60">
 
-<div class="exercise">
-<h3>Skipping</h3>
-<p>Jump continuously 60 sec × 3 sets</p>
-<button onclick="start(60,'Skipping')">Start</button>
-</div>
+<p><b>Skipping</b> – 60 sec × 3</p>
+<img src="https://images.unsplash.com/photo-1605296867304-46d5465a13f1?auto=format&fit=crop&w=800&q=60">
 
-<div class="exercise">
-<h3>Stretching</h3>
-<p>Stretch arms and legs for 2 minutes</p>
-<button onclick="start(120,'Stretching')">Start</button>
-</div>
+<p><b>Stretching</b> – 2 min</p>
+<img src="https://images.unsplash.com/photo-1554284126-aa88f22d8b72?auto=format&fit=crop&w=800&q=60">
 
+<button onclick="start(30,'Exercise')">Start Timer</button>
 <div class="timer" id="timer"></div>
-
 </div>
 </div>
 
 <div id="diet" class="page">
 <div class="card">
-<h2>🥗 Diet Plan</h2>
-<p>Milk, Eggs, Paneer, Banana, Nuts</p>
-<p>Green vegetables, Fruits</p>
-<p>3L Water + 8 Hours Sleep</p>
+<h2>🥗 Healthy Diet</h2>
+
+<p>Milk, Eggs, Paneer</p>
+<img src="https://images.unsplash.com/photo-1551218808-94e220e084d2?auto=format&fit=crop&w=800&q=60">
+
+<p>Fruits & Nuts</p>
+<img src="https://images.unsplash.com/photo-1574226516831-e1dff420e43e?auto=format&fit=crop&w=800&q=60">
+
+<p>Vegetables</p>
+<img src="https://images.unsplash.com/photo-1540420773420-3366772f4999?auto=format&fit=crop&w=800&q=60">
+
 </div>
 </div>
 
 <div id="tracker" class="page">
 <div class="card">
 <h2>📊 Growth Tracker</h2>
-<input id="n" placeholder="Enter new height">
+<input id="n" placeholder="New height">
 <button onclick="save()">Save</button>
 <p id="s" class="timer"></p>
 </div>
@@ -147,10 +151,9 @@ function speak(t){
 }
 
 let interval;
-
-function start(sec,name){
+function start(sec){
  clearInterval(interval);
- speak(name+" start now");
+ speak("Exercise start");
  let t=sec;
  interval=setInterval(()=>{
   document.getElementById("timer").innerHTML="Time: "+t+" sec";
@@ -172,9 +175,6 @@ function save(){
  localStorage.setItem("height",n);
  document.getElementById("s").innerHTML="Saved: "+n+" inch ✔";
 }
-
-// Daily voice reminder
-setTimeout(()=>{speak("Time for your height exercise");},5000);
 </script>
 
 </body>
