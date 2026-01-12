@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Height Booster – Harsh</title>
+<title>GrowTall Pro</title>
 <style>
 body{
  margin:0;
@@ -28,25 +28,17 @@ header{
  border-radius:15px;
  box-shadow:0 0 10px rgba(78,205,196,0.6);
 }
+button,input{
+ width:100%;
+ padding:12px;
+ border:none;
+ border-radius:10px;
+ margin-top:10px;
+}
 button{
  background:#4ecdc4;
  color:#003333;
- border:none;
- padding:12px;
- width:100%;
- border-radius:20px;
- font-size:16px;
  font-weight:bold;
- margin-top:10px;
-}
-input{
- width:100%;
- padding:12px;
- border-radius:10px;
- border:none;
- margin-top:10px;
- background:rgba(255,255,255,0.2);
- color:white;
 }
 .nav{
  position:fixed;
@@ -58,122 +50,88 @@ input{
 .nav button{
  flex:1;
  background:transparent;
- border:none;
- padding:15px;
  color:#003333;
  font-weight:bold;
 }
-.timer{
- text-align:center;
- font-size:22px;
- color:#4ecdc4;
-}
-img{
- width:100%;
+.progress{
+ height:10px;
+ background:#333;
  border-radius:10px;
- margin-top:8px;
+ overflow:hidden;
+}
+.progress div{
+ height:100%;
+ background:#4ecdc4;
+ width:0%;
 }
 </style>
 </head>
 
 <body>
 
-<header>Height Booster – Harsh</header>
+<header>GrowTall Pro</header>
 
-<div id="home" class="page active">
+<div id="welcome" class="page active">
 <div class="card">
-<h2>📏 Height Calculator</h2>
-<input id="h" type="number" value="65">
-<button onclick="predict()">Predict</button>
-<p id="r" class="timer"></p>
+<h2>Welcome to GrowTall</h2>
+<input id="cur" placeholder="Your height (inch)">
+<input id="goal" placeholder="Your goal height">
+<button onclick="start()">Start Journey</button>
+</div>
+</div>
+
+<div id="home" class="page">
+<div class="card">
+<h2>Your Progress</h2>
+<p id="ptext"></p>
+<div class="progress"><div id="pbar"></div></div>
 </div>
 </div>
 
 <div id="exercise" class="page">
 <div class="card">
-<h2>💪 Exercises</h2>
-
-<p><b>Hanging</b> – 30 sec × 5</p>
-<img src="https://images.unsplash.com/photo-1599058917212-d750089bc3d1?auto=format&fit=crop&w=800&q=60">
-
-<p><b>Skipping</b> – 60 sec × 3</p>
-<img src="https://images.unsplash.com/photo-1605296867304-46d5465a13f1?auto=format&fit=crop&w=800&q=60">
-
-<p><b>Stretching</b> – 2 min</p>
-<img src="https://images.unsplash.com/photo-1554284126-aa88f22d8b72?auto=format&fit=crop&w=800&q=60">
-
-<button onclick="start(30,'Exercise')">Start Timer</button>
-<div class="timer" id="timer"></div>
+<h2>Daily Exercise</h2>
+<p>Hanging 30 sec × 5</p>
+<p>Skipping 60 sec × 3</p>
+<p>Stretching 2 min</p>
 </div>
 </div>
 
 <div id="diet" class="page">
 <div class="card">
-<h2>🥗 Healthy Diet</h2>
-
-<p>Milk, Eggs, Paneer</p>
-<img src="https://images.unsplash.com/photo-1551218808-94e220e084d2?auto=format&fit=crop&w=800&q=60">
-
-<p>Fruits & Nuts</p>
-<img src="https://images.unsplash.com/photo-1574226516831-e1dff420e43e?auto=format&fit=crop&w=800&q=60">
-
-<p>Vegetables</p>
-<img src="https://images.unsplash.com/photo-1540420773420-3366772f4999?auto=format&fit=crop&w=800&q=60">
-
+<h2>Diet</h2>
+<p>Milk, Eggs, Paneer, Fruits, Veg</p>
 </div>
 </div>
 
-<div id="tracker" class="page">
-<div class="card">
-<h2>📊 Growth Tracker</h2>
-<input id="n" placeholder="New height">
-<button onclick="save()">Save</button>
-<p id="s" class="timer"></p>
-</div>
-</div>
-
-<div class="nav">
+<div id="nav" class="nav" style="display:none;">
 <button onclick="show('home')">Home</button>
 <button onclick="show('exercise')">Exercise</button>
 <button onclick="show('diet')">Diet</button>
-<button onclick="show('tracker')">Tracker</button>
 </div>
 
 <script>
+function start(){
+ let c=document.getElementById("cur").value;
+ let g=document.getElementById("goal").value;
+ localStorage.setItem("cur",c);
+ localStorage.setItem("goal",g);
+ show('home');
+ document.getElementById("nav").style.display="flex";
+ update();
+}
+
+function update(){
+ let c=localStorage.getItem("cur");
+ let g=localStorage.getItem("goal");
+ let p=((c/g)*100).toFixed(1);
+ document.getElementById("ptext").innerHTML="Height: "+c+" / "+g+" inch";
+ document.getElementById("pbar").style.width=p+"%";
+}
+
 function show(p){
  document.querySelectorAll('.page').forEach(e=>e.classList.remove('active'));
  document.getElementById(p).classList.add('active');
-}
-
-function speak(t){
- let msg=new SpeechSynthesisUtterance(t);
- speechSynthesis.speak(msg);
-}
-
-let interval;
-function start(sec){
- clearInterval(interval);
- speak("Exercise start");
- let t=sec;
- interval=setInterval(()=>{
-  document.getElementById("timer").innerHTML="Time: "+t+" sec";
-  if(t<=0){
-   clearInterval(interval);
-   speak("Rest for 30 seconds");
-  }
-  t--;
- },1000);
-}
-
-function predict(){
- let h=document.getElementById("h").value;
- document.getElementById("r").innerHTML="Future Height: "+(parseInt(h)+2)+" inch";
-}
-
-function save(){
- let n=document.getElementById("n").value;
- localStorage.setItem("height",n);
- document.getElementById("s").innerHTML="Saved: "+n+" inch ✔";
 }
 </script>
 
