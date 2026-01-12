@@ -5,60 +5,69 @@
 <title>GrowTall</title>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
 <style>
-*{box-sizing:border-box}
 body{
  margin:0;
  font-family:Poppins,Arial;
- background:linear-gradient(135deg,#0f2027,#203a43,#2c5364);
- color:white;
+ background:linear-gradient(135deg,#0b1220,#101b2d,#14223b);
+ color:#e8f1ff;
 }
 header{
  padding:20px;
  text-align:center;
  font-size:26px;
  font-weight:600;
- background:linear-gradient(90deg,#4ecdc4,#6be6ff);
- color:#003333;
+ background:linear-gradient(90deg,#5eead4,#38bdf8);
+ color:#022c22;
 }
+
 .screen{display:none;padding:20px;animation:fade .5s;}
 .screen.active{display:block;}
 @keyframes fade{from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:translateY(0);}}
 
 .card{
- background:rgba(255,255,255,0.08);
- backdrop-filter:blur(12px);
- padding:20px;
- border-radius:25px;
- box-shadow:0 15px 40px rgba(0,0,0,.4);
+ background:rgba(255,255,255,0.06);
+ backdrop-filter:blur(14px);
+ padding:22px;
+ border-radius:22px;
+ box-shadow:0 10px 30px rgba(0,0,0,.5);
  margin-bottom:20px;
 }
 
-input,button{
+input{
+ width:100%;
+ padding:14px;
+ border:none;
+ border-radius:14px;
+ margin-top:12px;
+ background:rgba(255,255,255,.12);
+ color:#e8f1ff;
+ font-size:16px;
+}
+input::placeholder{color:#b6c8e3;}
+
+button{
  width:100%;
  padding:14px;
  border:none;
  border-radius:16px;
  margin-top:12px;
- font-size:16px;
-}
-input{background:rgba(255,255,255,.2);color:white}
-button{
- background:linear-gradient(90deg,#4ecdc4,#6be6ff);
- color:#003333;
+ background:linear-gradient(90deg,#5eead4,#38bdf8);
+ color:#022c22;
  font-weight:600;
+ font-size:16px;
  transition:.3s;
 }
-button:hover{transform:scale(1.05)}
+button:hover{transform:scale(1.04);}
 
 .progress{
  height:14px;
- background:#333;
+ background:#1e293b;
  border-radius:10px;
  overflow:hidden;
 }
 .progress div{
  height:100%;
- background:linear-gradient(90deg,#4ecdc4,#6be6ff);
+ background:linear-gradient(90deg,#5eead4,#38bdf8);
  width:0%;
  transition:1s;
 }
@@ -68,19 +77,21 @@ button:hover{transform:scale(1.05)}
  bottom:0;
  width:100%;
  display:flex;
- background:rgba(78,205,196,.95);
+ background:rgba(20,34,59,.95);
+ backdrop-filter:blur(10px);
 }
 .nav button{
  flex:1;
  background:transparent;
- color:#003333;
+ color:#e8f1ff;
  font-weight:600;
 }
 
 .hero{
  width:100%;
- border-radius:20px;
+ border-radius:18px;
  margin-bottom:15px;
+ box-shadow:0 10px 20px rgba(0,0,0,.6);
 }
 </style>
 </head>
